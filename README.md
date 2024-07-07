@@ -17,27 +17,45 @@ Once you are on the Remix website, create a new file by clicking on the "+" icon
 
 bash
 
-     //contract/rhotoken.sol
-     //SPDX-License-Identifier: MIT
 
+    // SPDX-License-Identifier: MIT
+    pragma solidity ^0.8.0;
 
-    //pragma solidity ^0.8.17;
+    import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol";
 
-    import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.9.5/contracts/token/ERC20/ERC20.sol";
+    import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/access/Ownable.sol";
 
-    contract rhotoken is ERC20{
-    constructor(uint256 initialsupply) ERC20("rhotoken", "ROT") {
-        _mint(msg.sender, initialsupply);
+    contract RhoToken is ERC20, Ownable {
+
+     constructor() ERC20("rhotoken", "ROT") {
+    _mint (owner(), 1000 * 10**uint(decimals()));
     }
 
+
+
+    
+    // Function for owner to mint new tokens
+    function mint(address _to, uint256 _amount) public onlyOwner {
+    _mint(_to, _amount);
     }
 
-To compile the code, click on the "Solidity Compiler" tab in the left-hand sidebar. Make sure the "Compiler" option is set to "0.8.17" (or another compatible version), and then click on the "Compile Assesment.sol" button.
+    // Function for any user to burn tokens
+    function burn(uint256 _amount) public {
+    _burn(msg.sender, _amount);
+    }
+
+    // transfer the amount of tokens from the sender to the receiver
+    function _Transfer(address to, uint256 _amount)public {
+     _transfer(msg.sender, to, _amount); 
+    }
+    }
+
+To compile the code, click on the "Solidity Compiler" tab in the left-hand sidebar. Make sure the "Compiler" option is set to "0.8.0" (or another compatible version), and then click on the "Compile Assesment.sol" button.
 
 Once the code is compiled, you can deploy the contract by clicking on the "Deploy & Run Transactions", also need to see the environment is connected to metamask, tab in the left-hand sidebar. Ensure that in deploy need to give someamountof token as an example.Then 
 Click on the "Deploy" button.
 
-In the "Deployed Contracts" section, expand the rhotoken contract. you will able to see the name u have given to your token in "name", symbol in "symbol", token decimal places in "decimal", amd total no of token in circulation in "totalsupply". we can check our balance within our first account by using address of first account in "balanceof". 
+In the "Deployed Contracts" section, expand the rhotoken contract. you will able to see the name u have given to your token in "name", symbol in "symbol", token decimal places in "decimal", amd total no of token in circulation in "totalsupply". we can check our balance within our first account by using address of first account in "balanceof" as well as we can transfer amd burn the many to the sender and owner.
 .Confirm the transaction in MetaMask.
 
 
